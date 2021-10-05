@@ -1,3 +1,8 @@
+OBS quando for adcionar o primeiro item ou o primeiro funcionario
+na primeira vez ele nao vai adcionar por que vai tentar adcionar com o id 1,
+é so tentar novamente que funciona
+
+
 para que nao de erro no codigo em relação ao banco insira esses codigos nas devidas tabelas!
 
 na tabela access_group ou grupo de acesso insira o comando SQL
