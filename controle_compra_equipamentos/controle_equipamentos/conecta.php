@@ -1,7 +1,7 @@
 <?php
 include ('User.php');
 $parametros = (array)json_decode(file_get_contents('php://input'),true);
-$link = pg_connect("host=localhost port=5432 dbname=compra_equipamentos user=postgres password=2032418202lo");
+$link = pg_connect("host=localhost port=5432 dbname=compra_equipamentos user=postgres password=");
 
 if(empty($parametros)){
     $parametros = $_REQUEST;

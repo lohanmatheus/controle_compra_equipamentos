@@ -1,3 +1,7 @@
+
+//nome da database que usei foi "compra_equipamentos"
+//nome do schema da database foi "buy"
+
 create table access_group
 (
     id   serial
@@ -201,6 +205,4 @@ create table remove_product
 alter table remove_product
     owner to postgres;
 
-//nome da database que usei foi "compra_equipamentos"
-//nome do schema da database foi "buy"
 
