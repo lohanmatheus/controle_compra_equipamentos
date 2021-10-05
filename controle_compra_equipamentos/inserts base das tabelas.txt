@@ -1,0 +1,86 @@
+para que nao de erro no codigo em relação ao banco insira esses codigos nas devidas tabelas!
+
+na tabela access_group ou grupo de acesso insira o comando SQL
+
+INSERT INTO buy.access_group (id, name)
+VALUES (1, 'adm');
+
+INSERT INTO buy.access_group (id, name)
+VALUES (2, 'funcionario');
+
+----------------------------------------------------------------------
+na tabela payment_type ou tipo de pagamento insira 
+
+INSERT INTO buy.payment_type (id, name)
+VALUES (1, 'Dinheiro');
+
+INSERT INTO buy.payment_type (id, name)
+VALUES (2, 'Cheque');
+
+
+INSERT INTO buy.payment_type (id, name)
+VALUES (3, 'Boleto');
+
+
+INSERT INTO buy.payment_type (id, name)
+VALUES (4, 'Cartao de Credito');
+
+
+INSERT INTO buy.payment_type (id, name)
+VALUES (5, 'Cartao de Debito');
+
+-----------------------------------------------------------------------
+na tabela product_type ou tipo do produto pode adcionar os tipos que preferir no meu eu adcionei
+
+INSERT INTO buy.product_type (id, name)
+VALUES (1, 'mouse');
+
+INSERT INTO buy.product_type (id, name)
+VALUES (2, 'teclado');
+
+INSERT INTO buy.product_type (id, name)
+VALUES (3, 'monitor');
+
+INSERT INTO buy.product_type (id, name)
+VALUES (4, 'CPU');
+
+INSERT INTO buy.product_type (id, name)
+VALUES (5, 'moveis');
+
+INSERT INTO buy.product_type (id, name)
+VALUES (6, 'outro');
+
+-----------------------------------------------------------------------
+na tabela purchase_request_status ou status do pedido da requisição
+
+INSERT INTO buy.purchase_request_status (id, name)
+VALUES (1, 'aprovado');
+
+INSERT INTO buy.purchase_request_status (id, name)
+VALUES (2, 'recusado');
+
+INSERT INTO buy.purchase_request_status (id, name)
+VALUES (3, 'pendente');
+
+INSERT INTO buy.purchase_request_status (id, name)
+VALUES (4, 'comprado');
+
+-----------------------------------------------------------------------
+
+na tabela user ou usuario adcione um adm para poder usar o sistema, la vc adcionar os funcionarios
+
+INSERT INTO buy."user" (id, name, birth_date, register_date, documento, email, login, password, id_access_group)
+VALUES (1, 'nome', '1998-09-10', '2021-10-05', '111.111.111-11', 'teste@teste.com', 'test', '123', 1);
+
+
+
+duvidas me envie um email
+lohan_cs@hotmail.com
+			
+
+
+
+
+
+
+
