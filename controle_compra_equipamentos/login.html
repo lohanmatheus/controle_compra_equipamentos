@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="CSS/login.css">
+    <title>Login</title>
+</head>
+<body>
+    <div id="form-login">
+        <h1 id="tittle-login">Entrar</h1>
+        <form method="post" id="area-login">
+
+            <input id="login" value="" placeholder="Usuario" autocomplete="off" required>
+
+            <input id="password" value="" type="password" placeholder="Insira sua senha" required>
+            <br/>
+            <button type="button" onclick="verificaLogin()">Entrar</button>
+        </form>
+    </div>
+
+<script>
+    const verificaLogin = function () {
+        let login = document.getElementById('login').value
+        let password = document.getElementById('password').value
+
+        if (login === '') {
+            alert('Insira o seu login!')
+            return
+        }
+        if(password === ''){
+            alert('Insira sua senha!')
+            return
+        }
+        sendLogin (login, password);
+    }
+
+    function sendLogin(login, password){
+        const paramsLogin = {
+            data: {
+                login: login,
+                password: password
+            },
+            classe: 'user',
+            acao: 'logging',
+        }
+
+        let loginRequest = {
+            method: 'POST',
+            cache: 'default',
+            body: JSON.stringify(paramsLogin),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        let myRequest = new Request('http://localhost:8000/controle_equipamentos/conecta.php', loginRequest);
+
+        fetch(myRequest).then(response => {
+            return response.json();
+        }).then(function (response) {
+            if(response.codigo === 0) {
+                alert(response.msg)
+            }
+            else if (response.codigo === 1) {
+                document.getElementById('area-login').reset();
+                if(response.grupo === 'adm'){
+                    window.location.href = "indexadm.php";
+                }else if (response.grupo === 'funcionario'){
+                    window.location.href = "listar-solicitacoes-aprovadas-recusadas.php";
+                }
+            }
+    })
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, Geneva, Tahoma, sans-serif;
+    background-color: #CCCCCC;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+}
+
+#form-search {
+    border: 2px solid #403A3A;
+    border-radius: 0.3em;
+    padding: 0.3em;
+}
+#form-search img{
+    height: 18px;
+    width: 18px;
+}
+
+#form-search input, #form-search button {
+    font-size: 1.2em;
+    border-radius: 0.2em;
+    border: none;
+    padding: 0.2em;
+}
+
+#form-search button {
+    cursor: pointer;
+    background: none;
+    color: whitesmoke;
+}
+
+#form-search button:hover {
+    background-color: midnightblue;
+    color: blueviolet;
+}
+.modalDialog {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    rigth: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 99999;
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+    overflow: scroll; /* só ativa o scroll se o conteúdo do modal for cumprido */
+}
+
+.modalDialog:target {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modalDialog > div {
+    width: 800px;
+    position: relative;
+    margin: 150px auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+    -moz-box-shadow: 1px 1px 30px #000;
+    -webkit-box-shadow: 1px 1px 30px #000;
+    box-shadow: 1px 1px 30px #000;
+}
+.btn-add, .btn-remove{
+    font-size: 20px;
+    font-weight: bold;
+}
+.close {
+    background: #606061;
+    color: #fff;
+    line-heigth: 25px;
+    text-align: center;
+    text-decoration: none;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+    cursor: pointer;
+}
+
+/*.profile-menu {*/
+/*.dropdown-menu{*/
+/*    right: 0;*/
+/*    left: unset;*/
+/*}*/
+/*.fa-fw{*/
+/*    margin-right: 10px;*/
+/*}*/
+/*}*/
+/*.toggle-change{*/
+/*&::after {*/
+/*     border-top: 0;*/
+/*     border-bottom: .3em solid;*/
+/* }*/
+/*}*/
+
