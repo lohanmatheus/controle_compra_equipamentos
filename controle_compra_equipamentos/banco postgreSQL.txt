@@ -1,0 +1,208 @@
+
+//nome da database que usei foi "compra_equipamentos"
+//nome do schema da database foi "buy"
+
+create table access_group
+(
+    id   serial
+        constraint access_group_pkey
+            primary key,
+    name varchar(80) not null
+);
+
+alter table access_group
+    owner to postgres;
+
+create table "user"
+(
+    id              serial
+        constraint user_pkey
+            primary key,
+    name            varchar(150) not null,
+    birth_date      date         not null,
+    register_date   date,
+    documento       varchar(14)  not null
+        constraint user_document_key
+            unique,
+    email           varchar(100) not null,
+    login           varchar(30)  not null,
+    password        varchar(30)  not null,
+    id_access_group integer      not null
+        constraint user_id_access_group_fkey
+            references access_group
+);
+
+alter table "user"
+    owner to postgres;
+
+create unique index user_login_uindex
+    on "user" (login);
+
+create table product_type
+(
+    id   serial
+        constraint product_type_pkey
+            primary key,
+    name varchar(80)
+);
+
+alter table product_type
+    owner to postgres;
+
+create table product
+(
+    id              serial
+        constraint product_pkey
+            primary key,
+    name            varchar(80) not null,
+    description     text,
+    id_product_type integer     not null
+        constraint product_id_product_type_fkey
+            references product_type
+);
+
+alter table product
+    owner to postgres;
+
+create table purchase_request_status
+(
+    id   serial
+        constraint purchase_request_status_pkey
+            primary key,
+    name varchar(30) not null
+);
+
+alter table purchase_request_status
+    owner to postgres;
+
+create table purchase_request
+(
+    id                         serial
+        constraint purchase_request_pkey
+            primary key,
+    purchase_date              date,
+    request_date               date    not null,
+    verification_date_adm      date,
+    note                       text,
+    id_user_request            integer not null
+        constraint purchase_request_id_user_request_fkey
+            references "user",
+    id_adm                     integer
+        constraint purchase_request_id_adm_fkey
+            references "user",
+    id_purchase_request_status integer not null
+        constraint purchase_request_id_purchase_request_status_fkey
+            references purchase_request_status,
+    quantity                   integer
+);
+
+alter table purchase_request
+    owner to postgres;
+
+create table release_of_purchase_request
+(
+    id                  serial
+        constraint release_of_purchase_request_pkey
+            primary key,
+    id_user             integer not null
+        constraint release_of_purchase_request_id_user_fkey
+            references "user",
+    id_purchase_request integer not null
+        constraint release_of_purchase_request_id_purchase_request_fkey
+            references purchase_request
+);
+
+alter table release_of_purchase_request
+    owner to postgres;
+
+create table reason_cancellation
+(
+    id                  serial
+        constraint reason_cancellation_pkey
+            primary key,
+    reason              text    not null,
+    id_purchase_request integer not null
+        constraint reason_cancellation_id_purchase_request_fkey
+            references purchase_request
+);
+
+alter table reason_cancellation
+    owner to postgres;
+
+create table product_of_request
+(
+    id                  serial
+        constraint product_of_request_pkey
+            primary key,
+    quantity            integer not null,
+    value               numeric(10, 2),
+    invoice             text,
+    link                varchar(250),
+    id_purchase_request integer not null
+        constraint product_of_request_id_purchase_request_fkey
+            references purchase_request,
+    id_product          integer not null
+        constraint product_of_request_id_product_fkey
+            references product
+);
+
+alter table product_of_request
+    owner to postgres;
+
+create table payment_type
+(
+    id   serial
+        constraint payment_type_pkey
+            primary key,
+    name varchar(80) not null
+);
+
+alter table payment_type
+    owner to postgres;
+
+create table buy_of_request
+(
+    id                             serial
+        constraint buy_of_request_pkey
+            primary key,
+    id_release_of_purchase_request integer not null
+        constraint buy_of_request_id_release_of_purchase_request_fkey
+            references release_of_purchase_request,
+    id_payment_type                integer not null
+        constraint buy_of_request_id_payment_type_fkey
+            references payment_type,
+    buy_date                       date    not null
+);
+
+alter table buy_of_request
+    owner to postgres;
+
+create table stock
+(
+    id         serial
+        constraint stock_pkey
+            primary key,
+    id_product integer not null
+        constraint stock_id_product_fkey
+            references product,
+    quantity   integer not null
+);
+
+alter table stock
+    owner to postgres;
+
+create table remove_product
+(
+    id         serial
+        constraint remove_product_pkey
+            primary key,
+    id_product integer not null
+        constraint remove_product_id_product_fkey
+            references product,
+    reason     text    not null
+);
+
+alter table remove_product
+    owner to postgres;
+
+
