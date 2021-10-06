@@ -12,7 +12,7 @@
                         <form method="post">
                             <div class="form-group col-md-10 mb-1">
                                 <label for="view-reason"><b>Motivo:</b></label>
-                                <textarea class="form-control" id="view-reason" rows="3" disabled></textarea>
+                                <textarea class="form-control" id="view-reason" rows="7" disabled></textarea>
                             </div>
                         </form>
                     </div>
@@ -50,7 +50,11 @@
                 if (response.codigo === 1) {
                         document.getElementById('view-reason').innerHTML = `${response.dados.reason}
 
-Por: ${response.dados.name}`;
+
+
+
+Administrador: ${response.dados.name}
+Data: ${response.dados.verification_date_adm}`;
                     return false;
                 }
 

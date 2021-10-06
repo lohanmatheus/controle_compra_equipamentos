@@ -503,6 +503,8 @@ class User
     }
 
     public function reason(){
+        session_start();
+        $idAdm = $_SESSION['id'];
         $reason = $this->parametros['reason'];
         $idPurchaseRequest = $this->parametros['id'];
 
@@ -521,8 +523,10 @@ class User
             }
 
             $queryAlterStatus = "UPDATE compra_equipamentos.buy.purchase_request 
-                     SET id_purchase_request_status = 2 
-                   WHERE id = '$idPurchaseRequest' ";
+                     SET id_purchase_request_status = 2,
+                         verification_date_adm = current_date,
+                         id_adm = '$idAdm',
+                   WHERE id = '$idPurchaseRequest'";
 
             if (!pg_query($this->dbConnect, $queryAlterStatus)) {
                 pg_query($this->dbConnect, "ROLLBACK");
@@ -1106,7 +1110,8 @@ class User
     public function getReason(){
         $idPurchaseRequest = $this->parametros['id'];
 
-        $queryReason = "SELECT rc.reason, ur.name FROM compra_equipamentos.buy.reason_cancellation AS rc
+        $queryReason = "SELECT rc.reason, TO_CHAR(pr.verification_date_adm, 'DD/MM/YYYY') AS verification_date_adm, ur.name
+                        FROM compra_equipamentos.buy.reason_cancellation AS rc
                             JOIN compra_equipamentos.buy.purchase_request AS pr ON rc.id_purchase_request = pr.id
                             JOIN compra_equipamentos.buy.user AS ur ON pr.id_adm = ur.id                        
                            WHERE rc.id_purchase_request = '$idPurchaseRequest'";
@@ -1500,7 +1505,6 @@ class User
             }
 
     }
-
 
     public function listProductsComprados(){
 
