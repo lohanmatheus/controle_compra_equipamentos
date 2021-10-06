@@ -112,7 +112,7 @@ pageHeader('Criar Solicitação');
                 alert(response.msg)
                 if (response.codigo === 1) {
                     document.getElementById('insert-form').reset();
-                    voltarScreen();
+                    modalAddProduct.hideFormInsertProduct();
                     return;
                 }
             })

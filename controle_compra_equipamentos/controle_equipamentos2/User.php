@@ -209,10 +209,11 @@ class User
 
         try {
             $result = pg_query($this->dbConnect, $query);
-            if (!$result) {
+            if (pg_affected_rows($result) <= 0) {
                 return [
                     'codigo' => 0,
-                    'msg' => pg_errormessage($this->dbConnect)
+                    'msg' => "Nenhum registro encontrado!",
+                    'dados' => []
                 ];
             }
 
@@ -607,7 +608,8 @@ class User
         $queryStockProduct = "SELECT stock.*, product.name, pt.name AS product_type FROM compra_equipamentos.buy.stock
                                 JOIN compra_equipamentos.buy.product AS product ON stock.id_product = product.id
                                 JOIN compra_equipamentos.buy.product_type AS pt ON product.id_product_type = pt.id
-                               ORDER BY pt.id";
+                               WHERE quantity != 0
+                                ORDER BY pt.id";
 
         try {
             $resultStockProduct = pg_query($this->dbConnect, $queryStockProduct);
@@ -666,23 +668,69 @@ class User
             }
         }
 
+        $querySlcProduct = "SELECT * FROM compra_equipamentos.buy.product WHERE name = '$name'";
 
-        $query = "INSERT INTO 
+        try {
+            pg_query($this->dbConnect, "BEGIN TRANSACTION");
+            $resultSlcProduct = pg_query($this->dbConnect, $querySlcProduct);
+
+            if (pg_affected_rows($resultSlcProduct) > 0) {
+                return [
+                    'codigo' => 0,
+                    'msg' => 'Produto ja existe no sistema adm precisa removelo!!',
+                    'dados' => []
+                ];
+            }
+
+            $queryInsert = "INSERT INTO 
             compra_equipamentos.buy.product (name, description, id_product_type)
             VALUES ('$name', '$description', '$productType')";
 
-        try {
-            $executado = pg_query($this->dbConnect, $query);
-            if (!$executado) {
+            if (!pg_query($this->dbConnect, $queryInsert)) {
+                pg_query($this->dbConnect, "ROLLBACK");
                 return [
                     'codigo' => 0,
-                    'msg' => pg_errormessage($this->dbConnect)
+                    'msg' => 'Falha ao inserir produto!',
+                    'dados' => []
                 ];
             }
+
+            $queryIdProduct = "SELECT id FROM compra_equipamentos.buy.product WHERE name = '$name'";
+
+            if (!pg_query($this->dbConnect, $queryIdProduct)) {
+                pg_query($this->dbConnect, "ROLLBACK");
+                return [
+                    'codigo' => 0,
+                    'msg' => 'Erro ao selecionar Id do produto para alerar stock!',
+                    'dados' => []
+                ];
+            }
+
+            $resultIdProduct = pg_query($this->dbConnect, $queryIdProduct);
+
+            $rowIdProduct = pg_fetch_assoc($resultIdProduct);
+            $idProduct = $rowIdProduct['id'];
+
+            $queryInsertStock = "INSERT INTO compra_equipamentos.buy.stock (id_product, quantity)
+                                    VALUES ('$idProduct', 0)";
+
+            if (!pg_query($this->dbConnect, $queryInsertStock)) {
+                pg_query($this->dbConnect, "ROLLBACK");
+                return [
+                    'codigo' => 0,
+                    'msg' => 'Erro ao inserir produto no stock!',
+                    'dados' => []
+                ];
+            }
+
+            pg_query($this->dbConnect, "COMMIT");
+
             return [
                 'codigo' => 1,
-                'msg' => 'Produto inserido com sucesso!'
+                'msg' => 'Produto inserido com sucesso!',
+                'dados' => []
             ];
+
         } catch (\Exception $exception) {
             return [
                 'codigo' => 0,
@@ -1331,6 +1379,7 @@ class User
 
             pg_query($this->dbConnect, "BEGIN TRANSACTION");
             $resultIdPurchaseRequest = pg_query($this->dbConnect, $querySlcIdPurchaseRequest);
+
             if (pg_affected_rows($resultIdPurchaseRequest) < 1) {
                 return [
                     'codigo' => 0,
