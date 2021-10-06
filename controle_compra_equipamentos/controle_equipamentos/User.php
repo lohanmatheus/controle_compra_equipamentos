@@ -525,7 +525,7 @@ class User
             $queryAlterStatus = "UPDATE compra_equipamentos.buy.purchase_request 
                      SET id_purchase_request_status = 2,
                          verification_date_adm = current_date,
-                         id_adm = '$idAdm',
+                         id_adm = '$idAdm'
                    WHERE id = '$idPurchaseRequest'";
 
             if (!pg_query($this->dbConnect, $queryAlterStatus)) {
