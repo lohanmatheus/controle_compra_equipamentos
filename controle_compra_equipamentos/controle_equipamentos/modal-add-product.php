@@ -4,7 +4,9 @@
         <div class="modal-content">
             <div class="modal-header bg-dark text-light">
                 <h5 class="modal-title" id="staticBackdropLabel">Adicionar Produtos </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        onclick="modalAddProduct.escorderList()">
+                </button>
             </div>
             <div id="body-search-products" class="modal-body">
 
@@ -49,7 +51,7 @@
                     </button>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="modalAddProduct.escorderList()">Fechar</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="listADD()">Adicionar
                     </button>
                 </div>
@@ -110,6 +112,11 @@
             document.getElementById('footer-search-products').style.display = 'flex'
         }
 
+        this.escorderList = () => {
+            document.getElementById('area-menu2').style.display = 'none';
+        }
+
+
         this.loader = () => {
             document.getElementById('result-list').innerHTML = `<tr>
                 <td colspan="8" class="text-center">Carregando dados. Aguarde!</td>
@@ -132,11 +139,6 @@
         }
         this.listProducts = function () {
             const productName = document.getElementById('product-name').value
-
-            if (productName === '') {
-                alert('Informe o nome do produto no campo de busca!');
-                return;
-            }
 
             document.getElementById('area-menu2').style.display = 'block';
             this.loader()
