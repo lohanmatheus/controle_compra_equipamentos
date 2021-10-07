@@ -24,8 +24,8 @@ create table "user"
     documento       varchar(14)  not null
         constraint user_document_key
             unique,
-    email           varchar(100) not null,
-    login           varchar(30)  not null,
+    email           varchar(100) not null unique,
+    login           varchar(30)  not null unique,
     password        varchar(30)  not null,
     id_access_group integer      not null
         constraint user_id_access_group_fkey
