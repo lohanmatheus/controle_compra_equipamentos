@@ -89,33 +89,27 @@ class User
         $email = filter_var($dataUser['email'], FILTER_SANITIZE_SPECIAL_CHARS);
         $id_access_group = 2;
 
-
         $queryLogin = "SELECT * FROM compra_equipamentos.buy.user WHERE login = '$login' ";
         $queryDocumento = "SELECT * FROM compra_equipamentos.buy.user WHERE documento = '$documento' ";
+        $queryEmail = "SELECT * FROM compra_equipamentos.buy.user WHERE email = '$email' ";
 
-        if ($queryLogin) {
             try {
                 $resultLogin = pg_query($this->dbConnect, $queryLogin);
                 if (!$resultLogin) {
                     return [
                         'codigo' => 0,
-                        'msg' => 'Registro nao encontrado!',
+                        'msg' => 'Erro na verificação de login!',
                         'dados' => []
                     ];
                 }
 
-                if (pg_affected_rows($resultLogin) > 0) {
-
-                    $rowLogin = pg_fetch_assoc($resultLogin);
-
-                    if ($rowLogin['login'] == $login) {
+                if (pg_affected_rows($resultLogin) > 0){
                         return [
                             'codigo' => 0,
                             'msg' => 'Login ja existe no sistema!',
                             'dados' => []
                         ];
                         exit();
-                    }
                 }
 
             } catch (\Exception $exception) {
@@ -125,32 +119,25 @@ class User
                     'dados' => []
                 ];
             }
-        }
 
-
-        if ($queryDocumento) {
             try {
                 $resultDocumento = pg_query($this->dbConnect, $queryDocumento);
                 if (!$resultDocumento) {
                     return [
                         'codigo' => 0,
-                        'msg' => 'Registro nao encontrado!',
+                        'msg' => 'Erro ao verificar CPF!',
                         'dados' => []
                     ];
                 }
 
                 if (pg_affected_rows($resultDocumento) > 0) {
 
-                    $rowDocumento = pg_fetch_assoc($resultDocumento);
-
-                    if ($rowDocumento['documento'] == $documento) {
-                        return [
+                    return [
                             'codigo' => 0,
                             'msg' => 'CPF ja existe no sistema!',
                             'dados' => []
-                        ];
-                        exit();
-                    }
+                    ];
+                    exit();
                 }
 
             } catch (\Exception $exception) {
@@ -160,8 +147,33 @@ class User
                     'dados' => []
                 ];
             }
-        }
 
+        try {
+            $resultEmail = pg_query($this->dbConnect, $queryEmail);
+            if (!$resultEmail) {
+                return [
+                    'codigo' => 0,
+                    'msg' => 'Erro na verificação do Email!',
+                    'dados' => []
+                ];
+            }
+
+            if (pg_affected_rows($resultEmail) > 0){
+                return [
+                    'codigo' => 0,
+                    'msg' => 'Email ja existe no sistema!',
+                    'dados' => []
+                ];
+                exit();
+            }
+
+        } catch (\Exception $exception) {
+            return [
+                'codigo' => 0,
+                'msg' => $exception->getMessage(),
+                'dados' => []
+            ];
+        }
 
         $lista = [$name, $login, $password, $documento, $birthDate, $email];
 
@@ -174,7 +186,6 @@ class User
                 ];
             }
         }
-
 
         $query = "INSERT INTO
             compra_equipamentos.buy.user (name, login, password, documento, register_date, birth_date, email, id_access_group)
@@ -290,7 +301,7 @@ class User
         $email = filter_var($dataUser['email'], FILTER_SANITIZE_SPECIAL_CHARS);
 
 
-        $querySlc = "SELECT login, documento FROM compra_equipamentos.buy.user
+        $querySlc = "SELECT login, documento, email FROM compra_equipamentos.buy.user
                         WHERE id != '$id'";
             try {
                 $resultSlc = pg_query($this->dbConnect, $querySlc);
@@ -303,6 +314,7 @@ class User
                 }
 
                 while ($rowSlc = pg_fetch_assoc($resultSlc)) {
+
                     if($login == $rowSlc['login']){
                         return [
                             'codigo' => 0,
@@ -313,6 +325,12 @@ class User
                         return [
                             'codigo' => 0,
                             'msg' => 'CPF ja existe no sistema!',
+                            'dados' => []
+                        ];
+                    } else if ($email == $rowSlc['email']) {
+                        return [
+                            'codigo' => 0,
+                            'msg' => 'Email ja existe no sistema!',
                             'dados' => []
                         ];
                     }
